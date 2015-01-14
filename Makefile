@@ -19,7 +19,6 @@ all: $(TARGETDIR)/$(TARGET)
 
 $(TARGETDIR)/$(TARGET): $(OBJ)
 	@echo " Linking..."
-	@echo $(OBJ)
 	@mkdir -p $(TARGETDIR)
 	$(CC) $^ -o $(TARGETDIR)/$(TARGET) $(LIB)
 
