@@ -1,7 +1,7 @@
 SRCDIR := src
 BUILDDIR := build
 TARGETDIR := bin
-TARGET := raytrace
+TARGET := demo
 
 CC := clang++
 SRCEXT := cpp
@@ -13,19 +13,21 @@ SRC := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 OBJ := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SRC:.$(SRCEXT)=.o))
 DEP := $(OBJ:.o=.d)
 
-.PHONY: clean
+.PHONY: clean all
 
-$(TARGET): $(OBJ)
+all: $(TARGETDIR)/$(TARGET)
+
+$(TARGETDIR)/$(TARGET): $(OBJ)
 	@echo " Linking..."
+	@echo $(OBJ)
 	@mkdir -p $(TARGETDIR)
 	$(CC) $^ -o $(TARGETDIR)/$(TARGET) $(LIB)
-
 
 -include $(DEP)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
-	$(CC) -MMD -MP  $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) -MMD -MP $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	@echo " Cleaning...";
