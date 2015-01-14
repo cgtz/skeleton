@@ -1,6 +1,7 @@
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/program
+TARGETDIR := bin
+TARGET := raytrace
 
 CC := clang++
 SRCEXT := cpp
@@ -16,7 +17,8 @@ DEP := $(OBJ:.o=.d)
 
 $(TARGET): $(OBJ)
 	@echo " Linking..."
-	$(CC) $^ -o $(TARGET) $(LIB)
+	@mkdir -p $(TARGETDIR)
+	$(CC) $^ -o $(TARGETDIR)/$(TARGET) $(LIB)
 
 
 -include $(DEP)
@@ -27,5 +29,5 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo " Cleaning...";
-	$(RM) -r $(BUILDDIR) $(TARGET)
+	$(RM) -r $(BUILDDIR) $(TARGETDIR)
 
