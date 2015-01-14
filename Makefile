@@ -1,0 +1,31 @@
+SRCDIR := src
+BUILDDIR := build
+TARGET := bin/program
+
+CC := clang++
+SRCEXT := cpp
+CFLAGS := -std=c++11 -g -O2
+LIB := -L lib
+INC := -I include
+
+SRC := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
+OBJ := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SRC:.$(SRCEXT)=.o))
+DEP := $(OBJ:.o=.d)
+
+.PHONY: clean
+
+$(TARGET): $(OBJ)
+	@echo " Linking..."
+	$(CC) $^ -o $(TARGET) $(LIB)
+
+
+-include $(DEP)
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) -MMD -MP  $(CFLAGS) $(INC) -c -o $@ $<
+
+clean:
+	@echo " Cleaning...";
+	$(RM) -r $(BUILDDIR) $(TARGET)
+
